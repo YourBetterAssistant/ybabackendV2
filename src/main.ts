@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import Session from 'express-session';
-import passport from 'passport';
-import dotenv from 'dotenv';
-dotenv.config({
+import * as Session from 'express-session';
+import * as passport from 'passport';
+import { config } from 'dotenv';
+config({
   path: './.env',
 });
 async function bootstrap() {
