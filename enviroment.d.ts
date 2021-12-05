@@ -9,5 +9,8 @@ namespace NodeJS {
     readonly CALLBACKURL: string;
     readonly FRONTENDURL: string;
     readonly BOTTOKEN: string;
+    readonly REDISHOST: string;
+    readonly REDISPORT: number;
+    readonly REDISUSER: string;
   }
 }

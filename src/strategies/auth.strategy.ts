@@ -15,7 +15,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
   async validate(accessToken, refreshToken, profile, done): Promise<any> {
     const { id, username, discriminator, avatar, guilds, email } = profile;
     console.log('test');
-    const user = await this.userService?.getUserById(id);
+    const user = await this.userService?.getUserByIdAndUpdateGuilds(id, guilds);
     if (!user) {
       const userObj = {
         discordId: id,
