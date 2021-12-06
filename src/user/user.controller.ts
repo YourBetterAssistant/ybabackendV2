@@ -6,21 +6,19 @@ import { Request } from 'express';
 export interface IRequestWithUser extends Request {
   user: Users;
 }
+@UseGuards(AuthenticatedGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userSerivce: UserService) {}
-  @UseGuards(AuthenticatedGuard)
   @Get()
   getSelf(@Req() req: IRequestWithUser): Users {
     return req.user;
   }
-  @UseGuards(AuthenticatedGuard)
   @Get('/guilds')
   async getGuilds(@Req() req: IRequestWithUser): Promise<Guild[]> {
     const ug = await this.userSerivce.getBotGuilds();
     return this.userSerivce.getMutualGuilds(req.user.guilds, ug);
   }
-  @UseGuards(AuthenticatedGuard)
   @Get('/guilds/:id')
   async getGuild(
     @Param('id') id: string,
@@ -33,7 +31,6 @@ export class UserController {
       )
     ).find((g) => g.id === id);
   }
-  @UseGuards(AuthenticatedGuard)
   @Get('/guilds/:id/icon')
   async getGuildIcon(@Param('id') id: string): Promise<string | number> {
     return `<img src="${await this.userSerivce.getGuildIcon(
