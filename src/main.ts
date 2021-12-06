@@ -43,7 +43,7 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.setGlobalPrefix('api');
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3003;
   await app
     .listen(port)
     .then(() => console.log('Server Running On Port:' + port));
