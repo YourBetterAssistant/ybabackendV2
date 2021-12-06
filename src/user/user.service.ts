@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Guild, Users } from './models/user.model';
 import * as axios from 'Axios';
+import { chatbot } from './models/chatbot.model';
 const Axios = axios.default;
+type method = 'NEW' | 'DELETE' | 'EDIT';
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('users') private readonly userModel: Model<Users>) {}
+  constructor(
+    @InjectModel('users') private readonly userModel: Model<Users>,
+    @InjectModel('chatBot') private readonly chatBotModel: Model<chatbot>,
+  ) {}
   async getUserById(id: string) {
     const user = await this.userModel.findOne({ discordId: id });
     return user;
@@ -79,5 +84,31 @@ export class UserService {
     }
     const response = `https://cdn.discordapp.com/icons/${guildObj.id}/${guildObj.icon}`;
     return response;
+  }
+  async accessChatBotDB(method: method, data?: chatbot) {
+    if (
+      method === 'DELETE' &&
+      data.guildID &&
+      data.channelID === 'NOT_REQUIRED'
+    )
+      return this.chatBotModel.deleteOne({ guildID: data.guildID });
+    if (method === 'NEW' && data.guildID && data.channelID) {
+      const d = await this.chatBotModel.create({
+        guildID: data.guildID,
+        channelID: data.channelID,
+      });
+      return d.save();
+    }
+    if (method === 'EDIT' && data.guildID && data.channelID)
+      return await this.chatBotModel.updateOne(
+        { guildID: data.guildID },
+        { channelID: data.channelID },
+      );
+    else return HttpStatus.BAD_REQUEST;
+  }
+  async checkIfUserIsInGuild(user: Users, guildID: string) {
+    return (
+      await this.getMutualGuilds(user.guilds, await this.getBotGuilds())
+    ).find((g) => g.id === guildID);
   }
 }
