@@ -1,3 +1,4 @@
+import { Prefix } from './models/prefix.model';
 import { AuthenticatedGuard } from './../auth/guards/authenticated.guard';
 import { UserService } from './user.service';
 import {
@@ -15,13 +16,10 @@ import {
 } from '@nestjs/common';
 import { Users, Guild } from './models/user.model';
 import { Request, Response } from 'express';
+import { Chatbot } from './models/chatbot.model';
 export interface IRequestWithUser extends Request {
   user: Users;
 }
-type chatbot = {
-  guildID: string;
-  channelID: string;
-};
 
 @UseGuards(AuthenticatedGuard)
 @Controller('user')
@@ -56,7 +54,7 @@ export class UserController {
   }
   @Post('/guilds/features/chatbot')
   async postChatBot(
-    @Body() body: chatbot,
+    @Body() body: Chatbot,
     @Res() res: Response,
     @Req() req: IRequestWithUser,
   ) {
@@ -76,7 +74,7 @@ export class UserController {
   }
   @Delete('/guilds/features/chatbot')
   async deleteChatBot(
-    @Body() body: chatbot,
+    @Body() body: Chatbot,
     @Res() res: Response,
     @Req() req: IRequestWithUser,
   ) {
@@ -96,7 +94,7 @@ export class UserController {
   }
   @Put('/guilds/features/chatbot')
   async putChatBot(
-    @Body() body: chatbot,
+    @Body() body: Chatbot,
     @Res() res: Response,
     @Req() req: IRequestWithUser,
   ) {
@@ -112,6 +110,66 @@ export class UserController {
       return await this.userSerivce.accessChatBotDB('EDIT', {
         guildID: body.guildID,
         channelID: body.channelID,
+      });
+  }
+  @Post('/guilds/features/prefix')
+  async postPrefix(
+    @Body() body: Prefix,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+      return res
+        .json({ error: 'User is not in guild with correct permissions' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    if (!body.prefix && !body.guildID)
+      return res
+        .json({ error: 'Missing prefix or guild id' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    else
+      return await this.userSerivce.accessPrefixDB('NEW', {
+        guildID: body.guildID,
+        prefix: body.prefix,
+      });
+  }
+  @Delete('/guilds/features/prefix')
+  async deletePrefix(
+    @Body() body: Prefix,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+      return res
+        .json({ error: 'User is not in guild with correct permissions' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    if (!body.guildID)
+      return res
+        .json({ error: 'Missing guild id' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    else
+      return await this.userSerivce.accessPrefixDB('DELETE', {
+        guildID: body.guildID,
+        prefix: 'NOT_REQUIRED',
+      });
+  }
+  @Put('/guilds/features/prefix')
+  async editPrefix(
+    @Body() body: Prefix,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+      return res
+        .json({ error: 'User is not in guild with correct permissions' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    if (!body.prefix && !body.guildID)
+      return res
+        .json({ error: 'Missing prefix or guild id' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    else
+      return await this.userSerivce.accessPrefixDB('EDIT', {
+        guildID: body.guildID,
+        prefix: body.prefix,
       });
   }
 }

@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-export const chatBot = new mongoose.Schema({
+export const chatbot = new mongoose.Schema({
   guildID: {
     type: String,
     required: true,
@@ -9,6 +9,6 @@ export const chatBot = new mongoose.Schema({
     required: true,
   },
 });
-export class chatbot {
+export class Chatbot {
   constructor(public guildID: string, public channelID: string) {}
 }

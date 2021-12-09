@@ -1,16 +1,18 @@
+import { Prefix } from './models/prefix.model';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Guild, Users } from './models/user.model';
 import * as axios from 'Axios';
-import { chatbot } from './models/chatbot.model';
+import { Chatbot } from './models/chatbot.model';
 const Axios = axios.default;
 type method = 'NEW' | 'DELETE' | 'EDIT';
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel('users') private readonly userModel: Model<Users>,
-    @InjectModel('chatBot') private readonly chatBotModel: Model<chatbot>,
+    @InjectModel('chatBot') private readonly chatBotModel: Model<Chatbot>,
+    @InjectModel('guild-prefix') private readonly prefixModel: Model<Prefix>,
   ) {}
   async getUserById(id: string) {
     const user = await this.userModel.findOne({ discordId: id });
@@ -85,7 +87,7 @@ export class UserService {
     const response = `https://cdn.discordapp.com/icons/${guildObj.id}/${guildObj.icon}`;
     return response;
   }
-  async accessChatBotDB(method: method, data?: chatbot) {
+  async accessChatBotDB(method: method, data?: Chatbot) {
     if (
       method === 'DELETE' &&
       data.guildID &&
@@ -93,22 +95,47 @@ export class UserService {
     )
       return this.chatBotModel.deleteOne({ guildID: data.guildID });
     if (method === 'NEW' && data.guildID && data.channelID) {
+      const alrD = await this.chatBotModel.findOne({ guildID: data.guildID });
+      if (alrD) return HttpStatus.BAD_REQUEST;
       const d = await this.chatBotModel.create({
         guildID: data.guildID,
         channelID: data.channelID,
       });
       return d.save();
     }
-    if (method === 'EDIT' && data.guildID && data.channelID)
+    if (method === 'EDIT' && data.guildID && data.channelID) {
+      const alrD = await this.chatBotModel.findOne({ guildID: data.guildID });
+      if (!alrD) return HttpStatus.BAD_REQUEST;
       return await this.chatBotModel.updateOne(
         { guildID: data.guildID },
         { channelID: data.channelID },
       );
-    else return HttpStatus.BAD_REQUEST;
+    } else return HttpStatus.BAD_REQUEST;
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     return (
       await this.getMutualGuilds(user.guilds, await this.getBotGuilds())
     ).find((g) => g.id === guildID);
+  }
+  async accessPrefixDB(method: method, data?: Prefix) {
+    if (method === 'DELETE' && data.guildID && data.prefix === 'NOT_REQUIRED')
+      return this.prefixModel.deleteOne({ guildID: data.guildID });
+    if (method === 'NEW' && data.guildID && data.prefix) {
+      const alrD = await this.prefixModel.findOne({ guildID: data.guildID });
+      if (alrD) return HttpStatus.BAD_REQUEST;
+      const d = await this.prefixModel.create({
+        guildID: data.guildID,
+        prefix: data.prefix,
+      });
+      return d.save();
+    }
+    if (method === 'EDIT' && data.guildID && data.prefix) {
+      const alrD = await this.prefixModel.findOne({ guildID: data.guildID });
+      if (!alrD) return HttpStatus.BAD_REQUEST;
+      return await this.prefixModel.updateOne(
+        { guildID: data.guildID },
+        { prefix: data.prefix },
+      );
+    } else return HttpStatus.BAD_REQUEST;
   }
 }
