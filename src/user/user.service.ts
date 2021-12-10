@@ -6,6 +6,7 @@ import { Guild, Users } from './models/user.model';
 import * as axios from 'Axios';
 import { Chatbot } from './models/chatbot.model';
 import { LevellingEnabled } from './models/levellingenabled.model';
+import { Count } from './models/count.model';
 const Axios = axios.default;
 type method = 'NEW' | 'DELETE' | 'EDIT';
 @Injectable()
@@ -16,6 +17,7 @@ export class UserService {
     @InjectModel('guild-prefix') private readonly prefixModel: Model<Prefix>,
     @InjectModel('levellingEnabled')
     private readonly levellingEnabledModel: Model<LevellingEnabled>,
+    @InjectModel('countSchema') private readonly countModel: Model<Count>,
   ) {}
   async getUserById(id: string) {
     const user = await this.userModel.findOne({ discordId: id });
@@ -146,7 +148,7 @@ export class UserService {
     } else return HttpStatus.BAD_REQUEST;
   }
   async accesLevellingEnabledDB(method: method, data?: LevellingEnabled) {
-    if (method === 'DELETE' && data.guildID && !data.enabled)
+    if (method === 'DELETE' && data.guildID)
       return this.levellingEnabledModel.deleteOne({ guildID: data.guildID });
     if (method === 'NEW' && data.guildID && data.enabled) {
       const alrD = await this.levellingEnabledModel.findOne({
@@ -167,6 +169,35 @@ export class UserService {
       return await this.levellingEnabledModel.updateOne(
         { guildID: data.guildID },
         { enabled: data.enabled },
+      );
+    } else return HttpStatus.BAD_REQUEST;
+  }
+  async accesCountSchemaDB(method: method, data?: Count) {
+    if (
+      method === 'DELETE' &&
+      data._id &&
+      (data.voiceChannelID === 'NOT_REQUIRED' || !data.voiceChannelID)
+    )
+      return this.prefixModel.deleteOne({ _id: data._id });
+    if (method === 'NEW' && data._id && data.voiceChannelID) {
+      const alrD = await this.prefixModel.findOne({
+        _id: data._id,
+      });
+      if (alrD) return HttpStatus.BAD_REQUEST;
+      const d = await this.prefixModel.create({
+        _id: data._id,
+        voiceChannelID: data.voiceChannelID,
+      });
+      return d.save();
+    }
+    if (method === 'EDIT' && data._id && data.voiceChannelID) {
+      const alrD = await this.prefixModel.findOne({
+        _id: data._id,
+      });
+      if (!alrD) return HttpStatus.BAD_REQUEST;
+      return await this.prefixModel.updateOne(
+        { _id: data._id },
+        { voiceChannelID: data.voiceChannelID },
       );
     } else return HttpStatus.BAD_REQUEST;
   }

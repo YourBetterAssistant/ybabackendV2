@@ -17,6 +17,11 @@ import {
 import { Users, Guild } from './models/user.model';
 import { Request, Response } from 'express';
 import { Chatbot } from './models/chatbot.model';
+import { Count } from './models/count.model';
+import {
+  LevellingEnabled,
+  levellingEnabled,
+} from './models/levellingenabled.model';
 export interface IRequestWithUser extends Request {
   user: Users;
 }
@@ -173,5 +178,63 @@ export class UserController {
       });
   }
   @Post('/guilds/features/levellingEnabled')
-  async newLevellingEnabled() {}
+  async newLevellingEnabled(
+    @Body() body: LevellingEnabled,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+      return res
+        .json({ error: 'User is not in guild with correct permissions' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    if (!body.enabled && !body.guildID)
+      return res
+        .json({ error: 'Missing prefix or guild id' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    else
+      return await this.userSerivce.accesLevellingEnabledDB('NEW', {
+        guildID: body.guildID,
+        enabled: body.enabled,
+      });
+  }
+  @Delete('/guilds/features/levellingEnabled')
+  async deleteLevellingEnabled(
+    @Body() body: LevellingEnabled,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+      return res
+        .json({ error: 'User is not in guild with correct permissions' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    if (!body.guildID)
+      return res
+        .json({ error: 'Missing guild id' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    else
+      return await this.userSerivce.accesLevellingEnabledDB('DELETE', {
+        guildID: body.guildID,
+        enabled: false,
+      });
+  }
+  @Put('/guilds/features/levellingEnabled')
+  async editLevellingEnabled(
+    @Body() body: LevellingEnabled,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+      return res
+        .json({ error: 'User is not in guild with correct permissions' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    if (!body.enabled && !body.guildID)
+      return res
+        .json({ error: 'Missing prefix or guild id' })
+        .status(HttpStatus.NOT_ACCEPTABLE);
+    else
+      return await this.userSerivce.accesLevellingEnabledDB('EDIT', {
+        guildID: body.guildID,
+        enabled: body.enabled,
+      });
+  }
 }
