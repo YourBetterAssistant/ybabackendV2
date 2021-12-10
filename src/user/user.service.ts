@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Guild, Users } from './models/user.model';
 import * as axios from 'Axios';
 import { Chatbot } from './models/chatbot.model';
+import { LevellingEnabled } from './models/levellingenabled.model';
 const Axios = axios.default;
 type method = 'NEW' | 'DELETE' | 'EDIT';
 @Injectable()
@@ -13,6 +14,8 @@ export class UserService {
     @InjectModel('users') private readonly userModel: Model<Users>,
     @InjectModel('chatBot') private readonly chatBotModel: Model<Chatbot>,
     @InjectModel('guild-prefix') private readonly prefixModel: Model<Prefix>,
+    @InjectModel('levellingEnabled')
+    private readonly levellingEnabledModel: Model<LevellingEnabled>,
   ) {}
   async getUserById(id: string) {
     const user = await this.userModel.findOne({ discordId: id });
@@ -118,7 +121,11 @@ export class UserService {
     ).find((g) => g.id === guildID);
   }
   async accessPrefixDB(method: method, data?: Prefix) {
-    if (method === 'DELETE' && data.guildID && data.prefix === 'NOT_REQUIRED')
+    if (
+      method === 'DELETE' &&
+      data.guildID &&
+      (data.prefix === 'NOT_REQUIRED' || !data.prefix)
+    )
       return this.prefixModel.deleteOne({ guildID: data.guildID });
     if (method === 'NEW' && data.guildID && data.prefix) {
       const alrD = await this.prefixModel.findOne({ guildID: data.guildID });
@@ -135,6 +142,31 @@ export class UserService {
       return await this.prefixModel.updateOne(
         { guildID: data.guildID },
         { prefix: data.prefix },
+      );
+    } else return HttpStatus.BAD_REQUEST;
+  }
+  async accesLevellingEnabledDB(method: method, data?: LevellingEnabled) {
+    if (method === 'DELETE' && data.guildID && !data.enabled)
+      return this.levellingEnabledModel.deleteOne({ guildID: data.guildID });
+    if (method === 'NEW' && data.guildID && data.enabled) {
+      const alrD = await this.levellingEnabledModel.findOne({
+        guildID: data.guildID,
+      });
+      if (alrD) return HttpStatus.BAD_REQUEST;
+      const d = await this.levellingEnabledModel.create({
+        guildID: data.guildID,
+        enabled: data.enabled,
+      });
+      return d.save();
+    }
+    if (method === 'EDIT' && data.guildID && data.enabled) {
+      const alrD = await this.levellingEnabledModel.findOne({
+        guildID: data.guildID,
+      });
+      if (!alrD) return HttpStatus.BAD_REQUEST;
+      return await this.levellingEnabledModel.updateOne(
+        { guildID: data.guildID },
+        { enabled: data.enabled },
       );
     } else return HttpStatus.BAD_REQUEST;
   }

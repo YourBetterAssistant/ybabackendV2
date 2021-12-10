@@ -172,4 +172,6 @@ export class UserController {
         prefix: body.prefix,
       });
   }
+  @Post('/guilds/features/levellingEnabled')
+  async newLevellingEnabled() {}
 }

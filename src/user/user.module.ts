@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 import { DiscordStrategy } from 'src/strategies/auth.strategy';
 import { chatbot } from './models/chatbot.model';
 import { prefix } from './models/prefix.model';
+import { levellingEnabled } from './models/levellingenabled.model';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { prefix } from './models/prefix.model';
       { name: 'users', schema: users },
       { name: 'chatBot', schema: chatbot },
       { name: 'guild-prefix', schema: prefix },
+      { name: 'levellingEnabled', schema: levellingEnabled },
     ]),
   ],
   controllers: [UserController],
