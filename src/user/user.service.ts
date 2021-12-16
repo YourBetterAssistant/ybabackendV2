@@ -3,7 +3,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Guild, Users } from './models/user.model';
-import * as axios from 'Axios';
+import * as axios from 'axios';
 import { Chatbot } from './models/chatbot.model';
 import { LevellingEnabled } from './models/levellingenabled.model';
 import { Count } from './models/count.model';
