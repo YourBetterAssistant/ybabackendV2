@@ -14,7 +14,7 @@ const rport = process.env.REDISPORT;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: '*',
+    origin: true,
     maxAge: 1000 * 60 * 60 * 24,
   });
   const redisStore = connectRedis(Session);
