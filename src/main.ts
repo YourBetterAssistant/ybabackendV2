@@ -34,9 +34,8 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        domain: 'yourbetterassistant.me',
         maxAge: 1000 * 60 * 60 * 24,
-        sameSite: 'lax',
+        sameSite: 'strict',
         secure: true,
       },
       store: new redisStore({ client: redisClient }),
