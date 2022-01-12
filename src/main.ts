@@ -35,7 +35,7 @@ async function bootstrap() {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production' ? true : false,
+        secure: true,
       },
       store: new redisStore({ client: redisClient }),
     }),
