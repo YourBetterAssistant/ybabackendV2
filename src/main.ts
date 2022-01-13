@@ -13,6 +13,10 @@ const host = process.env.REDISHOST;
 const rport = process.env.REDISPORT;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  });
   const redisStore = connectRedis(Session);
   const redisClient = redis.createClient({
     host,
