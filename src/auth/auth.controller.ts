@@ -15,8 +15,8 @@ export class AuthController {
   }
   @UseGuards(DiscordGuard)
   @Get('discord/redirect')
-  getRedirect(@Res() res: Response): void | Response<any, Record<string, any>> {
-    return res.redirect(301, process.env.FRONTENDURL);
+  getRedirect(@Res() res: Response): void {
+    res.redirect(process.env.FRONTENDURL);
   }
   @UseGuards(AuthenticatedGuard)
   @Get('signout')
