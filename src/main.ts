@@ -15,10 +15,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     credentials: true,
-    origin: [
-      'https://yourbetterassistant.me',
-      'https://test.yourbetterassistant.me',
-    ],
+    origin: '*',
   });
   const redisStore = connectRedis(Session);
   const redisClient = redis.createClient({
@@ -38,6 +35,7 @@ async function bootstrap() {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: false,
+        sameSite: 'lax',
       },
       store: new redisStore({ client: redisClient }),
     }),
