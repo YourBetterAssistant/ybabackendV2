@@ -10,8 +10,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @UseGuards(UnauthenticatedGuard, DiscordGuard)
   @Get('discord')
-  signup(): number {
-    return 200;
+  signup(): void {
+    return;
   }
   @UseGuards(DiscordGuard)
   @Get('discord/redirect')
