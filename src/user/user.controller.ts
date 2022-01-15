@@ -52,7 +52,11 @@ export class UserController {
     ).find((g) => g.id === id);
   }
   @Get('/guilds/:id/icon')
-  async getGuildIcon(@Param('id') id: string): Promise<string | number> {
+  async getGuildIcon(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<string | number> {
+    res.header('Content-Type', 'image/x-icon');
     return `<img src="${await this.userSerivce.getGuildIcon(
       await this.userSerivce.getGuild(id),
     )}" alt="Discord Guild Icon"/>`;
