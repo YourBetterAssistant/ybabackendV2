@@ -56,7 +56,7 @@ export class UserController {
     @Param('id') id: string,
     @Res() res: Response,
   ): Promise<string | number> {
-    res.header('Content-Type', 'image/x-icon');
+    res.header('Content-Type', 'image/jpeg');
     return `<img src="${await this.userSerivce.getGuildIcon(
       await this.userSerivce.getGuild(id),
     )}" alt="Discord Guild Icon"/>`;
