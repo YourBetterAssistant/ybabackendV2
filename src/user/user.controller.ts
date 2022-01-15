@@ -56,10 +56,13 @@ export class UserController {
     @Param('id') id: string,
     @Res() res: Response,
   ): Promise<Response<any, Record<string, any>>> {
+    res.setHeader('Content-Type', 'image/jpeg');
     return res.send(
       `<img src="${await this.userSerivce.getGuildIcon(
         await this.userSerivce.getGuild(id),
-      )}" alt="Discord Guild Icon"/>`,
+      )}" alt="${await this.userSerivce.getGuildIcon(
+        await this.userSerivce.getGuild(id),
+      )}"/>`,
     );
   }
   @Post('/guilds/features/chatbot')
