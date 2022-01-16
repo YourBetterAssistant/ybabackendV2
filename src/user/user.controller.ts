@@ -73,12 +73,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.channelID && !body.guildID)
       return res
-        .json({ error: 'Missing channel or guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing channel or guild id' });
     else
       return res.send(
         await this.userSerivce.accessChatBotDB('NEW', {
