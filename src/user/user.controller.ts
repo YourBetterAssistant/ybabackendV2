@@ -80,10 +80,12 @@ export class UserController {
         .json({ error: 'Missing channel or guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accessChatBotDB('NEW', {
-        guildID: body.guildID,
-        channelID: body.channelID,
-      });
+      return res.send(
+        await this.userSerivce.accessChatBotDB('NEW', {
+          guildID: body.guildID,
+          channelID: body.channelID,
+        }),
+      );
   }
   @Delete('/guilds/features/chatbot')
   async deleteChatBot(
@@ -100,10 +102,12 @@ export class UserController {
         .json({ error: 'EXPECTED GUILDID TO BE VALID' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accessChatBotDB('DELETE', {
-        guildID: body.guildID,
-        channelID: 'NOT_REQUIRED',
-      });
+      return res.send(
+        await this.userSerivce.accessChatBotDB('DELETE', {
+          guildID: body.guildID,
+          channelID: 'NOT_REQUIRED',
+        }),
+      );
   }
   @Put('/guilds/features/chatbot')
   async putChatBot(
@@ -120,10 +124,12 @@ export class UserController {
         .json({ error: 'Missing channel or guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accessChatBotDB('EDIT', {
-        guildID: body.guildID,
-        channelID: body.channelID,
-      });
+      return res.send(
+        await this.userSerivce.accessChatBotDB('EDIT', {
+          guildID: body.guildID,
+          channelID: body.channelID,
+        }),
+      );
   }
   @Post('/guilds/features/prefix')
   async postPrefix(
@@ -140,10 +146,12 @@ export class UserController {
         .json({ error: 'Missing prefix or guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accessPrefixDB('NEW', {
-        guildID: body.guildID,
-        prefix: body.prefix,
-      });
+      return res.send(
+        await this.userSerivce.accessPrefixDB('NEW', {
+          guildID: body.guildID,
+          prefix: body.prefix,
+        }),
+      );
   }
   @Delete('/guilds/features/prefix')
   async deletePrefix(
@@ -160,10 +168,12 @@ export class UserController {
         .json({ error: 'Missing guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accessPrefixDB('DELETE', {
-        guildID: body.guildID,
-        prefix: 'NOT_REQUIRED',
-      });
+      return res.send(
+        await this.userSerivce.accessPrefixDB('DELETE', {
+          guildID: body.guildID,
+          prefix: 'NOT_REQUIRED',
+        }),
+      );
   }
   @Put('/guilds/features/prefix')
   async editPrefix(
@@ -180,10 +190,12 @@ export class UserController {
         .json({ error: 'Missing prefix or guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accessPrefixDB('EDIT', {
-        guildID: body.guildID,
-        prefix: body.prefix,
-      });
+      return res.send(
+        await this.userSerivce.accessPrefixDB('EDIT', {
+          guildID: body.guildID,
+          prefix: body.prefix,
+        }),
+      );
   }
   @Post('/guilds/features/levellingEnabled')
   async newLevellingEnabled(
@@ -200,10 +212,12 @@ export class UserController {
         .json({ error: 'Missing prefix or guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accesLevellingEnabledDB('NEW', {
-        guildID: body.guildID,
-        enabled: body.enabled,
-      });
+      return res.send(
+        await this.userSerivce.accesLevellingEnabledDB('NEW', {
+          guildID: body.guildID,
+          enabled: body.enabled,
+        }),
+      );
   }
   @Delete('/guilds/features/levellingEnabled')
   async deleteLevellingEnabled(
@@ -220,10 +234,12 @@ export class UserController {
         .json({ error: 'Missing guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accesLevellingEnabledDB('DELETE', {
-        guildID: body.guildID,
-        enabled: false,
-      });
+      return res.send(
+        await this.userSerivce.accesLevellingEnabledDB('DELETE', {
+          guildID: body.guildID,
+          enabled: false,
+        }),
+      );
   }
   @Put('/guilds/features/levellingEnabled')
   async editLevellingEnabled(
@@ -240,9 +256,11 @@ export class UserController {
         .json({ error: 'Missing prefix or guild id' })
         .status(HttpStatus.NOT_ACCEPTABLE);
     else
-      return await this.userSerivce.accesLevellingEnabledDB('EDIT', {
-        guildID: body.guildID,
-        enabled: body.enabled,
-      });
+      return res.send(
+        await this.userSerivce.accesLevellingEnabledDB('EDIT', {
+          guildID: body.guildID,
+          enabled: body.enabled,
+        }),
+      );
   }
 }
