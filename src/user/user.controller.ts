@@ -95,12 +95,13 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+
     if (!body.guildID)
       return res
-        .json({ error: 'EXPECTED GUILDID TO BE VALID' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'EXPECTED GUILDID TO BE VALID' });
     else
       return res.send(
         await this.userSerivce.accessChatBotDB('DELETE', {
@@ -117,12 +118,13 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+
     if (!body.channelID && !body.guildID)
       return res
-        .json({ error: 'Missing channel or guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing channel or guild id' });
     else
       return res.send(
         await this.userSerivce.accessChatBotDB('EDIT', {
@@ -139,12 +141,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.prefix && !body.guildID)
       return res
-        .json({ error: 'Missing prefix or guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing prefix or guild id' });
     else
       return res.send(
         await this.userSerivce.accessPrefixDB('NEW', {
@@ -161,12 +163,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.guildID)
       return res
-        .json({ error: 'Missing guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing guild id' });
     else
       return res.send(
         await this.userSerivce.accessPrefixDB('DELETE', {
@@ -183,12 +185,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.prefix && !body.guildID)
       return res
-        .json({ error: 'Missing prefix or guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing prefix or guild id' });
     else
       return res.send(
         await this.userSerivce.accessPrefixDB('EDIT', {
@@ -205,12 +207,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.enabled && !body.guildID)
       return res
-        .json({ error: 'Missing prefix or guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing prefix or guild id' });
     else
       return res.send(
         await this.userSerivce.accesLevellingEnabledDB('NEW', {
@@ -227,12 +229,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.guildID)
       return res
-        .json({ error: 'Missing guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing guild id' });
     else
       return res.send(
         await this.userSerivce.accesLevellingEnabledDB('DELETE', {
@@ -249,12 +251,12 @@ export class UserController {
   ) {
     if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
       return res
-        .json({ error: 'User is not in guild with correct permissions' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
     if (!body.enabled && !body.guildID)
       return res
-        .json({ error: 'Missing prefix or guild id' })
-        .status(HttpStatus.NOT_ACCEPTABLE);
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing prefix or guild id' });
     else
       return res.send(
         await this.userSerivce.accesLevellingEnabledDB('EDIT', {
