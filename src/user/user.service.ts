@@ -118,9 +118,7 @@ export class UserService {
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
-    const res = (await this.getMutualGuilds(user.guilds, botg)).find(
-      (g) => g.id === guildID,
-    );
+    const res = await this.getMutualGuilds(user.guilds, botg);
     console.log(res);
     return res;
   }
