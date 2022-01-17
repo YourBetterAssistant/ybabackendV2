@@ -39,7 +39,6 @@ export class UserService {
     const response = await Axios.get(
       'http://discord.com/api/v9/users/@me/guilds',
       {
-        method: 'GET',
         headers: {
           Authorization: `Bot ${process.env.BOTTOKEN}`,
         },
@@ -118,11 +117,6 @@ export class UserService {
     } else return HttpStatus.BAD_REQUEST;
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
-    console.log(
-      (await this.getMutualGuilds(user.guilds, await this.getBotGuilds())).find(
-        (g) => g.id === guildID,
-      ),
-    );
     return (
       await this.getMutualGuilds(user.guilds, await this.getBotGuilds())
     ).find((g) => g.id === guildID);
