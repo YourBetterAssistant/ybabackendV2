@@ -118,10 +118,11 @@ export class UserService {
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
-    console.log(botg);
-    return (await this.getMutualGuilds(user.guilds, botg)).find(
+    const res = (await this.getMutualGuilds(user.guilds, botg)).find(
       (g) => g.id === guildID,
     );
+    console.log(res);
+    return res;
   }
   async accessPrefixDB(method: method, data?: Prefix) {
     if (
