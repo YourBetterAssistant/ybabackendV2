@@ -117,9 +117,11 @@ export class UserService {
     } else return HttpStatus.BAD_REQUEST;
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
-    return (
-      await this.getMutualGuilds(user.guilds, await this.getBotGuilds())
-    ).find((g) => g.id === guildID);
+    const botg = await this.getBotGuilds();
+    console.log(botg);
+    return (await this.getMutualGuilds(user.guilds, botg)).find(
+      (g) => g.id === guildID,
+    );
   }
   async accessPrefixDB(method: method, data?: Prefix) {
     if (
