@@ -75,6 +75,7 @@ export class UserController {
       req.user,
       body.guildID,
     );
+    console.log(isInGuild);
     if (!isInGuild)
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
