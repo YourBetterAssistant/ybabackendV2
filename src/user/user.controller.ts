@@ -71,10 +71,11 @@ export class UserController {
     @Res() res: Response,
     @Req() req: IRequestWithUser,
   ) {
-    console.log(
-      await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID),
+    const isInGuild = await this.userSerivce.checkIfUserIsInGuild(
+      req.user,
+      body.guildID,
     );
-    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body.guildID)))
+    if (!isInGuild)
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
         .json({ error: 'User is not in guild with correct permissions' });
