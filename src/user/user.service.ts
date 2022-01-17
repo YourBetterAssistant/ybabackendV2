@@ -119,7 +119,7 @@ export class UserService {
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
     const res = await this.getMutualGuilds(user.guilds, botg);
-    console.log(res.find((g) => g.id == guildID));
+    console.log(guildID);
     return res.find((g) => g.id == guildID);
   }
   async accessPrefixDB(method: method, data?: Prefix) {
