@@ -76,7 +76,7 @@ export class UserController {
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
         .json({ error: 'User is not in guild' });
-    return await this.userSerivce.getChannels(id);
+    return res.send(await this.userSerivce.getChannels(id));
   }
   @Post('/guilds/features/chatbot')
   async postChatBot(
