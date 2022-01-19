@@ -48,7 +48,7 @@ export class UserService {
   }
   async getChannels(guildId) {
     const response = await Axios.get(
-      `https://discord.com/api/v9/channels/${guildId}/`,
+      `https://discord.com/api/v9/channels/${guildId}`,
       {
         headers: {
           Authorization: `Bot ${process.env.BOTTOKEN}`,
