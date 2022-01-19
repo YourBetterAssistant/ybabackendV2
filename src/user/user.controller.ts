@@ -78,7 +78,7 @@ export class UserController {
         .json({ error: 'User is not in guild' });
     return res.send(await this.userSerivce.getChannels(id));
   }
-  @Get('/guilds/:id/channels/textchannels')
+  @Get('/guilds/:id/channels/text')
   async getTextChannels(
     @Param('id') id: string,
     @Req() req: IRequestWithUser,
