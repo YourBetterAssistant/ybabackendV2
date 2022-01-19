@@ -7,8 +7,25 @@ import * as axios from 'axios';
 import { Chatbot } from './models/chatbot.model';
 import { LevellingEnabled } from './models/levellingenabled.model';
 import { Count } from './models/count.model';
+import { AxiosResponse } from 'axios';
 const Axios = axios.default;
 type method = 'NEW' | 'DELETE' | 'EDIT';
+type overwrites = {
+  id: string;
+  type: number;
+  allow: string;
+  deny: string;
+};
+type channel = {
+  id: string;
+  type: number;
+  name: string;
+  position: number;
+  parent_id: number | null;
+  guild_id: string;
+  permission_overwrites: Array<overwrites>;
+  nsfw: boolean;
+};
 @Injectable()
 export class UserService {
   constructor(
@@ -46,7 +63,7 @@ export class UserService {
     );
     return response.data;
   }
-  async getChannels(guildId) {
+  async getChannels(guildId): Promise<channel[]> {
     const response = await Axios.get(
       `https://discord.com/api/v9/guilds/${guildId}/channels`,
       {
@@ -55,7 +72,6 @@ export class UserService {
         },
       },
     );
-    console.log(response.data);
     return response.data;
   }
   async getGuild(guildid) {
