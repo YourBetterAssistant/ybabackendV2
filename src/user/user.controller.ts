@@ -44,11 +44,9 @@ export class UserController {
     @Param('id') id: string,
     @Req() req: IRequestWithUser,
   ): Promise<Guild> {
+    const botguilds = await this.userSerivce.getBotGuilds();
     return (
-      await this.userSerivce.getMutualGuilds(
-        req.user.guilds,
-        await this.userSerivce.getBotGuilds(),
-      )
+      await this.userSerivce.getMutualGuilds(req.user.guilds, botguilds)
     ).find((g) => g.id === id);
   }
   @Get('/guilds/:id/icon')
