@@ -57,7 +57,7 @@ export class UserService {
     setInterval(async () => {
       guildCache.length = 0;
     }, 1000 * 60 * 30);
-    if (guildCache.length === 0) return guildCache;
+    if (guildCache.length !== 0) return guildCache;
     else {
       const response = await Axios.get(
         'http://discord.com/api/v9/users/@me/guilds',
