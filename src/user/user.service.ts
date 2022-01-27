@@ -26,6 +26,7 @@ type channel = {
   permission_overwrites: Array<overwrites>;
   nsfw: boolean;
 };
+const guildCache: Guild[] = [];
 @Injectable()
 export class UserService {
   constructor(
@@ -53,16 +54,20 @@ export class UserService {
     return result;
   }
   async getBotGuilds() {
-    const response = await Axios.get(
-      'http://discord.com/api/v9/users/@me/guilds',
-      {
-        headers: {
-          Authorization: `Bot ${process.env.BOTTOKEN}`,
+    if (guildCache.length > 0) return guildCache;
+    else {
+      const response = await Axios.get(
+        'http://discord.com/api/v9/users/@me/guilds',
+        {
+          headers: {
+            Authorization: `Bot ${process.env.BOTTOKEN}`,
+          },
         },
-      },
-    );
-    console.log(response.data);
-    return response.data;
+      );
+      guildCache.push(...response.data);
+
+      return response.data;
+    }
   }
   async getChannels(guildId): Promise<channel[]> {
     const response = await Axios.get(
