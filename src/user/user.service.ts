@@ -54,6 +54,17 @@ export class UserService {
     return result;
   }
   async getBotGuilds() {
+    setInterval(async () => {
+      const response = await Axios.get(
+        'http://discord.com/api/v9/users/@me/guilds',
+        {
+          headers: {
+            Authorization: `Bot ${process.env.BOTTOKEN}`,
+          },
+        },
+      );
+      guildCache.push(...response.data);
+    }, 1000 * 60 * 30);
     if (guildCache.length > 0) return guildCache;
     else {
       const response = await Axios.get(
