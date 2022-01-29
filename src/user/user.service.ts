@@ -118,6 +118,11 @@ export class UserService {
     const response = `https://cdn.discordapp.com/icons/${guildObj.id}/${guildObj.icon}`;
     return response;
   }
+  async checkIfUserIsInGuild(user: Users, guildID: string) {
+    const botg = await this.getBotGuilds();
+    const res = await this.getMutualGuilds(user.guilds, botg);
+    return res.find((g) => g.id == guildID);
+  }
   async accessChatBotDB(method: method, data?: Chatbot) {
     if (
       method === 'DELETE' &&
@@ -143,12 +148,7 @@ export class UserService {
       );
     } else return HttpStatus.BAD_REQUEST;
   }
-  async checkIfUserIsInGuild(user: Users, guildID: string) {
-    const botg = await this.getBotGuilds();
-    const res = await this.getMutualGuilds(user.guilds, botg);
-    console.log(res);
-    return res.find((g) => g.id == guildID);
-  }
+
   async accessPrefixDB(method: method, data?: Prefix) {
     if (
       method === 'DELETE' &&
