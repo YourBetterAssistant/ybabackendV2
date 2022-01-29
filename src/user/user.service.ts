@@ -121,7 +121,9 @@ export class UserService {
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
     const res = await this.getMutualGuilds(user.guilds, botg);
-    return res.find((g) => g.id == guildID);
+    const f = res.find((g) => g.id == guildID);
+    console.log(f);
+    return f;
   }
   async accessChatBotDB(method: method, data?: Chatbot) {
     if (

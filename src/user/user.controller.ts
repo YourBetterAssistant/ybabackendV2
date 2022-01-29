@@ -174,7 +174,6 @@ export class UserController {
       body.guildID,
     );
     if (!guildis) {
-      console.log(guildis);
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
         .json({ error: 'User is not in guild with correct permissions' });
