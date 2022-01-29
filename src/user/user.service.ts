@@ -58,7 +58,6 @@ export class UserService {
       guildCache.length = 0;
     }, 1000 * 60 * 30);
     if (guildCache.length !== 0) {
-      console.log('Cached');
       return guildCache;
     } else {
       const response = await Axios.get(
@@ -147,6 +146,7 @@ export class UserService {
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
     const res = await this.getMutualGuilds(user.guilds, botg);
+    console.log(res);
     return res.find((g) => g.id == guildID);
   }
   async accessPrefixDB(method: method, data?: Prefix) {
