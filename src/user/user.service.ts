@@ -122,7 +122,6 @@ export class UserService {
     const botg = await this.getBotGuilds();
     const res = await this.getMutualGuilds(user.guilds, botg);
     const f = res.find((g) => g.id == guildID);
-    console.log(f);
     return f;
   }
   async accessChatBotDB(method: method, data?: Chatbot) {
