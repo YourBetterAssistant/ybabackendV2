@@ -43,11 +43,16 @@ export class UserController {
   async getGuild(
     @Param('id') id: string,
     @Req() req: IRequestWithUser,
-  ): Promise<Guild> {
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<Guild | string> {
     const botguilds = await this.userSerivce.getBotGuilds();
-    return (
+    const returned = (
       await this.userSerivce.getMutualGuilds(req.user.guilds, botguilds)
     ).find((g) => g.id === id);
+    if (!returned) {
+      res.status(HttpStatus.UNAUTHORIZED);
+      return 'User is not in guild';
+    } else return returned;
   }
   @Get('/guilds/:id/icon')
   async getGuildIcon(
