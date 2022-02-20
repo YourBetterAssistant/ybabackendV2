@@ -12,5 +12,6 @@ namespace NodeJS {
     readonly REDISHOST: string;
     readonly REDISPORT: number;
     readonly REDISUSER: string;
+    readonly APISECRET: string;
   }
 }
