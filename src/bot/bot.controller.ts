@@ -14,6 +14,7 @@ export class BotController {
   ): number {
     if (body.secret !== process.env.APISECRET) return 403;
     if (!body.commands || !body.interaction || !body.secret) return 400;
+    console.log(body);
     return this.Bot.postStats(body.commands, body.interaction);
   }
 }

@@ -31,6 +31,7 @@ export class BotService {
     return cache;
   }
   postStats(commands: CommmandStat[], interaction: InteractionStat[]) {
+    cache.length = 0;
     cache.push({
       commands: commands,
       interaction: interaction,
