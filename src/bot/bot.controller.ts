@@ -13,6 +13,7 @@ export class BotController {
     @Body() body: { secret: string; commands: any[]; interaction: any[] },
   ): number {
     if (body.secret !== process.env.APISECRET) return 403;
+    if (!body.commands || !body.interaction || !body.secret) return 400;
     return this.Bot.postStats(body.commands, body.interaction);
   }
 }
