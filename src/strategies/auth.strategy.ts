@@ -14,17 +14,19 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
   }
   async validate(accessToken, refreshToken, profile, done): Promise<any> {
     const { id, username, discriminator, avatar, guilds, email } = profile;
+    const userObj = {
+      discordId: id,
+      discordTag: `${username}#${discriminator}`,
+      avatar,
+      guilds,
+      email,
+    };
     console.log('test');
-    const user = await this.userService?.getUserByIdAndUpdateGuilds(id, guilds);
+    const user = await this.userService?.getUserAndRefresh(id, userObj);
     if (!user) {
-      const userObj = {
-        discordId: id,
-        discordTag: `${username}#${discriminator}`,
-        avatar,
-        guilds,
-        email,
-      };
       return done(null, await this.userService.addUserToDB(userObj));
-    } else return done(null, user);
+    } else {
+      return done(null, user);
+    }
   }
 }

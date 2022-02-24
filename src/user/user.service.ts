@@ -41,12 +41,12 @@ export class UserService {
     const user = await this.userModel.findOne({ discordId: id });
     return user;
   }
-  async getUserByIdAndUpdateGuilds(id: string, guilds: Array<Guild>) {
-    const user = await this.userModel.findOneAndUpdate(
-      { discordId: id },
-      { guilds },
+  async getUserAndRefresh(id, user: Users) {
+    const newUser = await this.userModel.findOneAndUpdate(
+      { discordId: user.discordId },
+      user,
     );
-    return user;
+    return newUser;
   }
   async addUserToDB(user: Users) {
     const newUser = await this.userModel.create(user);
