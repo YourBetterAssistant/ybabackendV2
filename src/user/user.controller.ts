@@ -90,6 +90,21 @@ export class UserController {
       (await this.userSerivce.getChannels(id)).filter((c) => c.type === 0),
     );
   }
+  @Get('/guilds/:id/channels/voice')
+  async getVoiceChannels(
+    @Param('id') id: string,
+    @Req() req: IRequestWithUser,
+    @Res() res: Response,
+  ) {
+    const isInGuild = await this.userSerivce.checkIfUserIsInGuild(req.user, id);
+    if (!isInGuild)
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild' });
+    return res.send(
+      (await this.userSerivce.getChannels(id)).filter((c) => c.type === 2),
+    );
+  }
   @Post('/guilds/features/chatbot')
   async postChatBot(
     @Body() body: Chatbot,
