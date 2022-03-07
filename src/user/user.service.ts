@@ -124,7 +124,8 @@ export class UserService {
       await fetch(response, {
         method: 'GET',
       })
-    ).blob();
+    ).text();
+    console.log(res);
     return res;
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
