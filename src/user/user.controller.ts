@@ -18,10 +18,7 @@ import { Users, Guild } from './models/user.model';
 import { Request, Response } from 'express';
 import { Chatbot } from './models/chatbot.model';
 import { Count } from './models/count.model';
-import {
-  LevellingEnabled,
-  levellingEnabled,
-} from './models/levellingenabled.model';
+import { LevellingEnabled } from './models/levellingenabled.model';
 export interface IRequestWithUser extends Request {
   user: Users;
 }
@@ -252,7 +249,7 @@ export class UserController {
     if (!body.enabled && !body.guildID)
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
-        .json({ error: 'Missing prefix or guild id' });
+        .json({ error: 'Missing Enabled or guild id' });
     else
       return res.send(
         await this.userSerivce.accesLevellingEnabledDB('NEW', {
@@ -296,12 +293,81 @@ export class UserController {
     if (!body.enabled && !body.guildID)
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
-        .json({ error: 'Missing prefix or guild id' });
+        .json({ error: 'Missing Enabled or guild id' });
     else
       return res.send(
         await this.userSerivce.accesLevellingEnabledDB('EDIT', {
           guildID: body.guildID,
           enabled: body.enabled,
+        }),
+      );
+  }
+  //Starting Count Model
+  @Post('/guilds/features/count')
+  async newCount(
+    @Body() body: Count,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body._id)))
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+    if (!body.voiceChannelID && !body._id)
+      return res.status(HttpStatus.NOT_ACCEPTABLE).json({
+        error:
+          'Missing Count or guild id, expected _id or voiceChannelID to have content',
+      });
+    else
+      return res.send(
+        await this.userSerivce.accesCountSchemaDB('NEW', {
+          _id: body._id,
+          voiceChannelID: body.voiceChannelID,
+        }),
+      );
+  }
+  @Delete('/guilds/features/count')
+  async deleteCount(
+    @Body() body: Count,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body._id)))
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+    if (!body._id)
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing guild id, expected _id to have content' });
+    else
+      return res.send(
+        await this.userSerivce.accesCountSchemaDB('DELETE', {
+          _id: body._id,
+          voiceChannelID: 'NOT_REQUIRED',
+        }),
+      );
+  }
+  @Put('/guilds/features/count')
+  async editCount(
+    @Body() body: Count,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body._id)))
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+    if (!body.voiceChannelID && !body._id)
+      return res.status(HttpStatus.NOT_ACCEPTABLE).json({
+        error:
+          'Missing Count or guild id, expected _id or voiceChannelID to have content ',
+      });
+    else
+      return res.send(
+        await this.userSerivce.accesCountSchemaDB('EDIT', {
+          _id: body._id,
+          voiceChannelID: body.voiceChannelID,
         }),
       );
   }

@@ -4,7 +4,7 @@ import * as Session from 'express-session';
 import * as passport from 'passport';
 import { config } from 'dotenv';
 import * as compression from 'compression';
-import * as redis from 'redis';
+import redis from 'redis';
 import * as connectRedis from 'connect-redis';
 config({
   path: './.env',
@@ -12,6 +12,7 @@ config({
 const host = process.env.REDISHOST;
 const rport = process.env.REDISPORT;
 async function bootstrap() {
+  const url = `redis://${host}:${rport}`;
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     credentials: true,
@@ -19,9 +20,10 @@ async function bootstrap() {
   });
   const redisStore = connectRedis(Session);
   const redisClient = redis.createClient({
-    host,
-    port: rport,
+    url,
+    legacyMode: true,
   });
+  redisClient.connect();
   redisClient.on('connect', function (err) {
     err ? console.error(err) : null;
     console.log('redis connected');

@@ -7,7 +7,7 @@ import * as axios from 'axios';
 import { Chatbot } from './models/chatbot.model';
 import { LevellingEnabled } from './models/levellingenabled.model';
 import { Count } from './models/count.model';
-import { AxiosResponse } from 'axios';
+import { MemberLog } from './models/memberlog.model';
 const Axios = axios.default;
 type method = 'NEW' | 'DELETE' | 'EDIT';
 type overwrites = {
@@ -36,6 +36,8 @@ export class UserService {
     @InjectModel('levellingEnabled')
     private readonly levellingEnabledModel: Model<LevellingEnabled>,
     @InjectModel('countSchema') private readonly countModel: Model<Count>,
+    @InjectModel('logschemas')
+    private readonly memberLogModel: Model<MemberLog>,
   ) {}
   async getUserById(id: string) {
     const user = await this.userModel.findOne({ discordId: id });
@@ -206,26 +208,55 @@ export class UserService {
       data._id &&
       (data.voiceChannelID === 'NOT_REQUIRED' || !data.voiceChannelID)
     )
-      return this.prefixModel.deleteOne({ _id: data._id });
+      return this.countModel.deleteOne({ _id: data._id });
     if (method === 'NEW' && data._id && data.voiceChannelID) {
-      const alrD = await this.prefixModel.findOne({
+      const alrD = await this.countModel.findOne({
         _id: data._id,
       });
       if (alrD) return HttpStatus.BAD_REQUEST;
-      const d = await this.prefixModel.create({
+      const d = await this.countModel.create({
         _id: data._id,
         voiceChannelID: data.voiceChannelID,
       });
       return d.save();
     }
     if (method === 'EDIT' && data._id && data.voiceChannelID) {
-      const alrD = await this.prefixModel.findOne({
+      const alrD = await this.countModel.findOne({
         _id: data._id,
       });
       if (!alrD) return HttpStatus.BAD_REQUEST;
-      return await this.prefixModel.updateOne(
+      return await this.countModel.updateOne(
         { _id: data._id },
         { voiceChannelID: data.voiceChannelID },
+      );
+    } else return HttpStatus.BAD_REQUEST;
+  }
+  async accessLogSchemaDB(method: method, data?: MemberLog) {
+    if (
+      method === 'DELETE' &&
+      data._id &&
+      (data.channelID === 'NOT_REQUIRED' || !data.channelID)
+    )
+      return this.countModel.deleteOne({ _id: data._id });
+    if (method === 'NEW' && data._id && data.channelID) {
+      const alrD = await this.countModel.findOne({
+        _id: data._id,
+      });
+      if (alrD) return HttpStatus.BAD_REQUEST;
+      const d = await this.countModel.create({
+        _id: data._id,
+        channelID: data.channelID,
+      });
+      return d.save();
+    }
+    if (method === 'EDIT' && data._id && data.channelID) {
+      const alrD = await this.countModel.findOne({
+        _id: data._id,
+      });
+      if (!alrD) return HttpStatus.BAD_REQUEST;
+      return await this.countModel.updateOne(
+        { _id: data._id },
+        { channelID: data.channelID },
       );
     } else return HttpStatus.BAD_REQUEST;
   }
