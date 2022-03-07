@@ -49,6 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express-session", "npm:1.17.4"],
             ["@types/jest", "npm:27.4.1"],
             ["@types/node", "npm:17.0.21"],
+            ["@types/node-fetch", "npm:2.6.1"],
             ["@types/passport", "npm:1.0.7"],
             ["@types/passport-discord", "npm:0.1.5"],
             ["@types/supertest", "npm:2.0.11"],
@@ -2429,6 +2430,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-17.0.21-7d68eb6a13-89dcd2fe82.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:17.0.21"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/node-fetch", [
+        ["npm:2.6.1", {
+          "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.6.1-cb57369c1c-a3e5d7f413.zip/node_modules/@types/node-fetch/",
+          "packageDependencies": [
+            ["@types/node-fetch", "npm:2.6.1"],
+            ["@types/node", "npm:16.11.11"],
+            ["form-data", "npm:3.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -10112,6 +10124,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express-session", "npm:1.17.4"],
             ["@types/jest", "npm:27.4.1"],
             ["@types/node", "npm:17.0.21"],
+            ["@types/node-fetch", "npm:2.6.1"],
             ["@types/passport", "npm:1.0.7"],
             ["@types/passport-discord", "npm:0.1.5"],
             ["@types/supertest", "npm:2.0.11"],

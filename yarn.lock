@@ -1653,6 +1653,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-fetch@npm:latest":
+  version: 2.6.1
+  resolution: "@types/node-fetch@npm:2.6.1"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^3.0.0
+  checksum: a3e5d7f413d1638d795dff03f7b142b1b0e0c109ed210479000ce7b3ea11f9a6d89d9a024c96578d9249570c5fe5287a5f0f4aaba98199222230196ff2d6b283
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 16.11.11
   resolution: "@types/node@npm:16.11.11"
@@ -8227,6 +8237,7 @@ __metadata:
     "@types/express-session": ^1.17.4
     "@types/jest": 27.4.1
     "@types/node": ^17.0.21
+    "@types/node-fetch": latest
     "@types/passport": ^1.0.7
     "@types/passport-discord": ^0.1.5
     "@types/supertest": ^2.0.11
