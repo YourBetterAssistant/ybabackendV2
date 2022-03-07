@@ -124,9 +124,8 @@ export class UserService {
       await fetch(response, {
         method: 'GET',
       })
-    ).arrayBuffer();
-    const buffer = Buffer.from(new Uint8Array(res));
-    return buffer;
+    ).blob();
+    return res;
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
