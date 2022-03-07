@@ -57,6 +57,7 @@ export class UserController {
     @Param('id') id: string,
     @Res() res: Response,
   ): Promise<any> {
+    res.contentType('image/jpeg');
     return res.send(
       await this.userSerivce.getGuildIcon(await this.userSerivce.getGuild(id)),
     );
