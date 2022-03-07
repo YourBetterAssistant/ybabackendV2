@@ -19,6 +19,7 @@ import { Request, Response } from 'express';
 import { Chatbot } from './models/chatbot.model';
 import { Count } from './models/count.model';
 import { LevellingEnabled } from './models/levellingenabled.model';
+import { MemberLog } from './models/memberlog.model';
 export interface IRequestWithUser extends Request {
   user: Users;
 }
@@ -368,6 +369,75 @@ export class UserController {
         await this.userSerivce.accesCountSchemaDB('EDIT', {
           _id: body._id,
           voiceChannelID: body.voiceChannelID,
+        }),
+      );
+  }
+  //starting Log Schema
+  @Post('/guilds/features/memberlog')
+  async newLog(
+    @Body() body: MemberLog,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body._id)))
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+    if (!body.channelID && !body._id)
+      return res.status(HttpStatus.NOT_ACCEPTABLE).json({
+        error:
+          'Missing Log or guild id, expected _id or channelID to have content',
+      });
+    else
+      return res.send(
+        await this.userSerivce.accessLogSchemaDB('NEW', {
+          _id: body._id,
+          channelID: body.channelID,
+        }),
+      );
+  }
+  @Delete('/guilds/features/memberlog')
+  async deleteLog(
+    @Body() body: MemberLog,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body._id)))
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+    if (!body._id)
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'Missing guild id, expected _id to have content' });
+    else
+      return res.send(
+        await this.userSerivce.accessLogSchemaDB('DELETE', {
+          _id: body._id,
+          channelID: 'NOT_REQUIRED',
+        }),
+      );
+  }
+  @Put('/guilds/features/memberlog')
+  async editLog(
+    @Body() body: MemberLog,
+    @Res() res: Response,
+    @Req() req: IRequestWithUser,
+  ) {
+    if (!(await this.userSerivce.checkIfUserIsInGuild(req.user, body._id)))
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ error: 'User is not in guild with correct permissions' });
+    if (!body.channelID && !body._id)
+      return res.status(HttpStatus.NOT_ACCEPTABLE).json({
+        error:
+          'Missing log or guild id, expected _id or channelID to have content ',
+      });
+    else
+      return res.send(
+        await this.userSerivce.accessLogSchemaDB('EDIT', {
+          _id: body._id,
+          channelID: body.channelID,
         }),
       );
   }

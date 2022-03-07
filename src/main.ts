@@ -4,7 +4,7 @@ import * as Session from 'express-session';
 import * as passport from 'passport';
 import { config } from 'dotenv';
 import * as compression from 'compression';
-import redis from 'redis';
+import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
 config({
   path: './.env',
