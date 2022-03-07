@@ -33,6 +33,7 @@
     "connect-redis": "^6.1.1",
     "express-session": "^1.17.2",
     "mongoose": "^6.2.4",
+    "node-fetch": "^3.2.1",
     "passport": "^0.5.2",
     "passport-discord": "^0.1.4",
     "redis": "^4.0.4",

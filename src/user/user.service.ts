@@ -8,6 +8,7 @@ import { Chatbot } from './models/chatbot.model';
 import { LevellingEnabled } from './models/levellingenabled.model';
 import { Count } from './models/count.model';
 import { MemberLog } from './models/memberlog.model';
+import fetch from 'node-fetch';
 const Axios = axios.default;
 type method = 'NEW' | 'DELETE' | 'EDIT';
 type overwrites = {
