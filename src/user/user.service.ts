@@ -125,7 +125,8 @@ export class UserService {
         method: 'GET',
       })
     ).arrayBuffer();
-    return toBuffer(res);
+    const buffer = Buffer.from(new Uint8Array(res));
+    return buffer;
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
@@ -267,12 +268,4 @@ export class UserService {
       );
     } else return HttpStatus.BAD_REQUEST;
   }
-}
-function toBuffer(ab: ArrayBuffer): Buffer {
-  const buf = Buffer.alloc(ab.byteLength);
-  const view = new Uint8Array(ab);
-  for (let i = 0; i < buf.length; ++i) {
-    buf[i] = view[i];
-  }
-  return buf;
 }
