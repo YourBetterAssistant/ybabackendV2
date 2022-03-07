@@ -124,9 +124,14 @@ export class UserService {
       await fetch(response, {
         method: 'GET',
       })
-    ).text();
-    console.log(res);
-    return res;
+    ).blob();
+    const reader = new FileReader();
+    reader.readAsDataURL(res);
+    reader.onloadend = () => {
+      const base64data = reader.result;
+      const buff = Buffer.from(base64data.toString().split(',')[1], 'base64');
+      return buff;
+    };
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
