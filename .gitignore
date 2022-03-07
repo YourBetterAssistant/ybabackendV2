@@ -3,7 +3,13 @@
 /node_modules
 .env
 test.http
-.yarn
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 # Logs
 logs
 *.log
