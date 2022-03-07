@@ -53,17 +53,9 @@ export class UserController {
     } else return returned;
   }
   @Get('/guilds/:id/icon')
-  async getGuildIcon(
-    @Param('id') id: string,
-    @Res() res: Response,
-  ): Promise<Response<any, Record<string, any>>> {
-    res.setHeader('Content-Type', 'image/jpeg');
-    return res.send(
-      `<img src="${await this.userSerivce.getGuildIcon(
-        await this.userSerivce.getGuild(id),
-      )}" alt="${await this.userSerivce.getGuildIcon(
-        await this.userSerivce.getGuild(id),
-      )}"/>`,
+  async getGuildIcon(@Param('id') id: string): Promise<Buffer | number> {
+    return await this.userSerivce.getGuildIcon(
+      await this.userSerivce.getGuild(id),
     );
   }
   @Get('/guilds/:id/channels')
