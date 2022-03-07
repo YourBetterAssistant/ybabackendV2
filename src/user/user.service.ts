@@ -113,12 +113,18 @@ export class UserService {
     const text = channels.filter((c) => c.type == 0 || c.type == 5);
     return text;
   }
-  async getGuildIcon(guildObj: Guild): Promise<string | number> {
+  async getGuildIcon(guildObj: Guild): Promise<Buffer | number> {
     if (typeof guildObj === 'number') {
       return guildObj == 401 ? 401 : 500;
     }
+
     const response = `https://cdn.discordapp.com/icons/${guildObj.id}/${guildObj.icon}`;
-    return response;
+    const res = await (
+      await fetch(response, {
+        method: 'GET',
+      })
+    ).arrayBuffer();
+    return toBuffer(res);
   }
   async checkIfUserIsInGuild(user: Users, guildID: string) {
     const botg = await this.getBotGuilds();
@@ -260,4 +266,12 @@ export class UserService {
       );
     } else return HttpStatus.BAD_REQUEST;
   }
+}
+function toBuffer(ab: ArrayBuffer): Buffer {
+  const buf = Buffer.alloc(ab.byteLength);
+  const view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; ++i) {
+    buf[i] = view[i];
+  }
+  return buf;
 }
