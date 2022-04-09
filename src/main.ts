@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 import * as compression from 'compression';
 import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
+import { NestExpressApplication } from '@nestjs/platform-express';
 config({
   path: './.env',
 });
@@ -13,11 +14,12 @@ const host = process.env.REDISHOST;
 const rport = process.env.REDISPORT;
 async function bootstrap() {
   const url = `redis://${host}:${rport}`;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
     credentials: true,
     origin: true,
   });
+  app.set('trust proxy', 1);
   const redisStore = connectRedis(Session);
   const redisClient = redis.createClient({
     url,
@@ -37,13 +39,15 @@ async function bootstrap() {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: false,
-        sameSite: 'lax',
+        sameSite: 'none',
+        secure: true,
       },
       store: new redisStore({ client: redisClient }),
     }),
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
   app.setGlobalPrefix('api');
   const port = process.env.PORT || 3003;
   await app
